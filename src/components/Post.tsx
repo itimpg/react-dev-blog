@@ -1,14 +1,21 @@
-import ReactMarkdown from 'react-markdown'
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-export default function Post({ path }: { path: string }) {
-  const [content, setContent] = useState('')
+type PostProps = {
+  path: string;
+};
+
+export default function Post({ path }: PostProps) {
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     fetch(path)
-      .then(res => res.text())
-      .then(setContent)
-  }, [path])
+      .then((res) => res.text())
+      .then((text) => setContent(text));
+  }, [path]);
 
-  return <ReactMarkdown>{content}</ReactMarkdown>
+  return (
+    <div className="p-4 text-white whitespace-pre-wrap">
+      {content}
+    </div>
+  );
 }
