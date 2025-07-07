@@ -4,7 +4,3 @@
 @theme {
   --font-app: "Noto Sans Thai", "Manrope", sans-serif;
 }
-
-div {
-  border: 1px solid red;
-}

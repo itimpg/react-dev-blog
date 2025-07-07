@@ -1,4 +1,7 @@
+import './Post.css'
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm'
 
 type PostProps = {
   path: string;
@@ -14,8 +17,10 @@ export default function Post({ path }: PostProps) {
   }, [path]);
 
   return (
-    <div className="p-4 text-white whitespace-pre-wrap">
-      {content}
+    <div className="p-4">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {content}
+      </ReactMarkdown>
     </div>
   );
 }

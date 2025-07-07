@@ -25,7 +25,7 @@ function App() {
         onSelect={(filename) => setSelectedPath(`/react-dev-blog/blogs/${filename}`)}
       />
 
-      <div className="mx-auto bg-sky-500 w-max m-x-auto">
+      <div className="p-4">
         {selectedPath && <Post path={selectedPath} />}
       </div>
     </div>
