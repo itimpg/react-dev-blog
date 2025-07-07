@@ -1,0 +1,48 @@
+name: Clean Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master  # หรือ main ตาม branch คุณ
+
+jobs:
+  clean-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # จำเป็นเพื่อจะได้ลบ branch ได้
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Delete gh-pages branch if exists
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # ลองเช็คว่ามี branch gh-pages อยู่ไหม
+          if git ls-remote --exit-code --heads origin gh-pages; then
+            echo "Deleting existing gh-pages branch"
+            git push origin --delete gh-pages
+          else
+            echo "No gh-pages branch to delete"
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # force push เพื่อแทนที่ทุกอย่าง
+          force_orphan: true
